@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "org.poiesis.transmutation.Main"
+    ],
+    "server": [
+        "org.poiesis.transmutation.MainServer"
     ]
   },
   "mixins": [
