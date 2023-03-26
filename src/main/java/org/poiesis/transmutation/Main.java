@@ -3,11 +3,15 @@ package org.poiesis.transmutation;
 import com.google.gson.Gson;
 import io.wispforest.owo.network.OwoNetChannel;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.util.Identifier;
 import org.poiesis.transmutation.config.TransmutationConfig;
 import org.poiesis.transmutation.emc.EmcValueMapper;
 import org.poiesis.transmutation.emc.EmcValueStore;
 import org.poiesis.transmutation.emc.ItemEntry;
+import org.poiesis.transmutation.listeners.PlayerJoinListener;
+import org.poiesis.transmutation.listeners.ServerStartListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +29,7 @@ public class Main implements ModInitializer {
 	public record EmcMapPacket(String emcMap) {}
 	@Override
 	public void onInitialize() {
-		// Register the channel
+		// Register the networking channel
 		EMCMAPCHANNEL.registerClientbound(EmcMapPacket.class, (message, access) -> {
 			LOGGER.info("Received EMC map from server");
 			// convert the array to a ArrayList<ItemEntry>
@@ -35,6 +39,16 @@ public class Main implements ModInitializer {
 			emcValueStore.addEmcValue(itemEntry.itemName, itemEntry.emcValue);
 
 		});
+
+		// Register listeners
+		ServerLifecycleEvents.SERVER_STARTING.register(new ServerStartListener());
+		ServerPlayConnectionEvents.JOIN.register(new PlayerJoinListener());
+
+		// Load EMC values from config
+		LOGGER.info("Loading EMC values from config...");
+		emcValueStore.loadDefaultValues(config.emcMap());
+		LOGGER.info("Done. Transmutation mod initialized.");
+
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.

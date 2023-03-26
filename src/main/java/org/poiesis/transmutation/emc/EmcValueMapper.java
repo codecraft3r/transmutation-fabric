@@ -11,28 +11,31 @@ import net.minecraft.server.MinecraftServer;
 import org.poiesis.transmutation.Main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class EmcValueMapper {
     public void mapRecipes(MinecraftServer server) {
-        for (Recipe<?> recipe : server.getRecipeManager().values()) {// iterate over all recipes
-            if (recipe.getType() != RecipeType.CRAFTING) {
-                continue;
-            }
-            if(Main.emcValueStore.getEmcValue(String.valueOf(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem())) == 0) {
+        for (Recipe<?> recipe : server.getRecipeManager().values()) {
+            // iterate over all recipes
+            if(Main.emcValueStore.getEmcValue(String.valueOf(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem())) != 0) {
                 continue;
             }
             ArrayList<Integer> lowestIngredientValues = new ArrayList<>();
             for (Ingredient ingredient : recipe.getIngredients()) {
                 // iterate over all ingredients in recipe
                 ArrayList<Integer> allPossibleIngredientValues = new ArrayList<>();
+                if (ingredient.getMatchingStacks().length == 0) {
+                    continue;
+                }
                 for (ItemStack itemStack : ingredient.getMatchingStacks()) {
                     // iterate over all items in ingredient
                     Item item = itemStack.getItem();
-                    allPossibleIngredientValues.add(Main.emcValueStore.getEmcValue(String.valueOf(item)));
+                    int emcValue = Main.emcValueStore.getEmcValue(String.valueOf(item));
+                    allPossibleIngredientValues.add(emcValue);
+
                 }
-                // get lowest value item from ingredient
-                lowestIngredientValues.add(getLowestValue(allPossibleIngredientValues));
+                lowestIngredientValues.add(Collections.min(allPossibleIngredientValues));
             }
             // set recipe emc value to sum of lowest value ingredients, if any ingredient has no emc value, skip recipe
             if (checkForZero(lowestIngredientValues)) {
@@ -40,19 +43,6 @@ public class EmcValueMapper {
             }
             Main.emcValueStore.addEmcValue(String.valueOf(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem()), sumArrayListValues(lowestIngredientValues));
         }
-    }
-    private int getLowestValue(ArrayList<Integer> values) {
-        int lowestValue = Integer.MAX_VALUE;
-        for (int value : values) {
-            if (value < lowestValue) {
-                lowestValue = value;
-            }
-        }
-        if (lowestValue > Integer.MAX_VALUE - 1) {
-            return 0;
-        }
-        return lowestValue;
-
     }
     private boolean checkForZero(ArrayList<Integer> values) {
         for (int value : values) {
