@@ -7,6 +7,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import org.poiesis.transmutation.Main;
 
@@ -18,7 +19,7 @@ public class EmcValueMapper {
     public void mapRecipes(MinecraftServer server) {
         for (Recipe<?> recipe : server.getRecipeManager().values()) {
             // iterate over all recipes
-            if(Main.emcValueStore.getEmcValue(String.valueOf(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem())) != 0) {
+            if(Main.emcValueStore.getEmcValue(Registries.ITEM.getId(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem()).toString()) != 0) {
                 continue;
             }
             ArrayList<Integer> lowestIngredientValues = new ArrayList<>();
@@ -31,7 +32,7 @@ public class EmcValueMapper {
                 for (ItemStack itemStack : ingredient.getMatchingStacks()) {
                     // iterate over all items in ingredient
                     Item item = itemStack.getItem();
-                    int emcValue = Main.emcValueStore.getEmcValue(String.valueOf(item));
+                    int emcValue = Main.emcValueStore.getEmcValue(Registries.ITEM.getId(item).toString());
                     allPossibleIngredientValues.add(emcValue);
 
                 }
@@ -41,7 +42,7 @@ public class EmcValueMapper {
             if (checkForZero(lowestIngredientValues)) {
                 continue;
             }
-            Main.emcValueStore.addEmcValue(String.valueOf(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem()), sumArrayListValues(lowestIngredientValues));
+            Main.emcValueStore.addEmcValue(Registries.ITEM.getId(recipe.getOutput(DynamicRegistryManager.EMPTY).getItem()).toString(), sumArrayListValues(lowestIngredientValues));
         }
     }
     private boolean checkForZero(ArrayList<Integer> values) {

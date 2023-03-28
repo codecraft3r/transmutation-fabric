@@ -9,12 +9,13 @@ import java.util.HashMap;
 public class ConfigModel {
 
     public HashMap<String, Integer> emcMap = new HashMap<>() {{
-        put(String.valueOf(Items.DIRT), 1);
-        put(String.valueOf(Items.COBBLESTONE), 1);
-        put(String.valueOf(Items.STONE), 1);
-        put(String.valueOf(Items.GRASS_BLOCK), 1);
-        put(String.valueOf(Items.SAND), 1);
-        put(String.valueOf(Items.GRAVEL), 1);
-        put(String.valueOf(Items.OAK_LOG), 1);
+        put("minecraft:dirt", 1);
+        put("minecraft:stone", 1);
+        put("minecraft:gravel", 16);
+        put("minecraft:flint", 16);
+        put("minecraft:coal", 64);
+        put("minecraft:iron_ingot", 128);
+        put("minecraft:gold_ingot", 256);
+
     }};
 }

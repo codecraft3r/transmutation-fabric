@@ -3,6 +3,7 @@ package org.poiesis.transmutation.mixin;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +20,7 @@ public class ItemEMCTooltipMixin {
 
     @Inject(at = @At("HEAD"),method="appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Ljava/util/List;Lnet/minecraft/client/item/TooltipContext;)V")
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
-        int emc = Main.emcValueStore.getEmcValue(String.valueOf(stack.getItem()));
+        int emc = Main.emcValueStore.getEmcValue(Registries.ITEM.getId(stack.getItem()).toString());
         if (emc != 0) {
             tooltip.add(Text.translatable("text.transmutation.emc", emc));
         }

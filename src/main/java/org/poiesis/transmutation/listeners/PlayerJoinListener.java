@@ -21,7 +21,7 @@ public class PlayerJoinListener implements ServerPlayConnectionEvents.Join {
                 continue;
             }
             String json = gson.toJson(entry);
-            Main.LOGGER.info("Sending EMC entry to player " + player.getName() + ": " + json);
+            Main.LOGGER.info("Sending EMC entry to player " + player.getName().getString() + ": " + json);
             Main.EMCMAPCHANNEL.serverHandle(player).send(new Main.EmcMapPacket(json));
         }
     }

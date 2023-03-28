@@ -20,12 +20,23 @@
   "entrypoints": {
     "main": [
       "org.poiesis.transmutation.Main"
+    ],
+    "client": [
+      "org.poiesis.transmutation.MainClient"
+    ],
+    "cardinal-components": [
+      "org.poiesis.transmutation.components.RegisterComponents"
     ]
   },
   "mixins": [
     "transmutation.mixins.json"
   ],
-
+  "custom": {
+    "cardinal-components": [
+      "transmutation:synced_int",
+      "transmutation:synced_string_array_list"
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.14.17",
     "fabric-api": "*",
