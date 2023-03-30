@@ -11,11 +11,12 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import org.poiesis.transmutation.Main;
 import org.poiesis.transmutation.components.RegisterComponents;
+import org.poiesis.transmutation.components.SyncedIntComponent;
 import org.poiesis.transmutation.components.SyncedStringArrayListComponent;
 
 public class TransmutationScreenHandler extends ScreenHandler {
     private Inventory inventory;
-    private Inventory sacrificialInventory;
+    private SimpleInventory sacrificialInventory;
 
     public TransmutationScreenHandler(int syncId, PlayerInventory playerInventory) {
         super(Main.TRANSMUTATION_SCREEN_HANDLER, syncId);
@@ -26,10 +27,32 @@ public class TransmutationScreenHandler extends ScreenHandler {
 
         // Create the InfiniteItemSlots
         for (int i = 0; i < howBigIsYourBrain; i++) {
-                addSlot(new InfiniteItemSlot(inventory, i, 8 + (i % 9) * 18, 18 + (i / 9) * 18, Registries.ITEM.get(new Identifier(knowledge.getList().get(i)))));
+                addSlot(new EmcItemSlot(inventory, i, 8 + (i % 9) * 18, 18 + (i / 9) * 18, Registries.ITEM.get(new Identifier(knowledge.getList().get(i))), playerInventory.player));
         }
         // Create sacrificial slots
         addSlot(new Slot(sacrificialInventory, 0, 8 + 9 * 18, 18 + 3 * 18));
+
+        sacrificialInventory.addListener((listener) -> {
+            ItemStack stack = sacrificialInventory.getStack(0);
+            if (stack.isEmpty()) {
+                return;
+            }
+            Identifier id = Registries.ITEM.getId(stack.getItem());
+            int emcValue = Main.emcValueStore.getEmcValue(id.toString());
+            if (emcValue != 0) {
+                SyncedIntComponent playerEmc = RegisterComponents.SYNCED_INT_COMPONENT.get(playerInventory.player);
+                playerEmc.setValue(playerEmc.getValue() + (emcValue * stack.getCount()));
+            } else {
+                return;
+            }
+
+            SyncedStringArrayListComponent playerKnowledge = RegisterComponents.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
+            if (!playerKnowledge.getList().contains(id.toString())) {
+                playerKnowledge.getList().add(id.toString());
+            }
+            sacrificialInventory.setStack(0, ItemStack.EMPTY);
+        });
+
 
         // Add the player's inventory slots
         int playerInvY = 84;
