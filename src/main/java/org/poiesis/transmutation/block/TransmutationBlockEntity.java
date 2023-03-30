@@ -15,7 +15,7 @@ public class TransmutationBlockEntity extends BlockEntity implements NamedScreen
         super(RegisterBlockEntities.TRANSMUTATION_TABLE_BLOCK_ENTITY, pos, state);
     }
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public TransmutationScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         return new TransmutationScreenHandler(syncId, playerInventory);
     }
 
