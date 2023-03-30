@@ -15,8 +15,8 @@ import org.poiesis.transmutation.components.SyncedIntComponent;
 import org.poiesis.transmutation.components.SyncedStringArrayListComponent;
 
 public class TransmutationScreenHandler extends ScreenHandler {
-    private Inventory inventory;
-    private SimpleInventory sacrificialInventory;
+    private final Inventory inventory;
+    private final SimpleInventory sacrificialInventory;
 
     public TransmutationScreenHandler(int syncId, PlayerInventory playerInventory) {
         super(Main.TRANSMUTATION_SCREEN_HANDLER, syncId);
@@ -30,7 +30,7 @@ public class TransmutationScreenHandler extends ScreenHandler {
                 addSlot(new EmcItemSlot(inventory, i, 8 + (i % 9) * 18, 18 + (i / 9) * 18, Registries.ITEM.get(new Identifier(knowledge.getList().get(i))), playerInventory.player));
         }
         // Create sacrificial slots
-        addSlot(new Slot(sacrificialInventory, 0, 8 + 9 * 18, 18 + 3 * 18));
+        addSlot(new Slot(sacrificialInventory, 0, 140, 72));
 
         sacrificialInventory.addListener((listener) -> {
             ItemStack stack = sacrificialInventory.getStack(0);
@@ -55,7 +55,7 @@ public class TransmutationScreenHandler extends ScreenHandler {
 
 
         // Add the player's inventory slots
-        int playerInvY = 84;
+        int playerInvY = 94;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
                 int x = 8 + col * 18;
@@ -67,7 +67,7 @@ public class TransmutationScreenHandler extends ScreenHandler {
 
 
         // Add the player's hotbar slots
-        int hotbarY = 142;
+        int hotbarY = 148;
         for (int i = 0; i < 9; i++) {
             int x = 8 + i * 18;
             addSlot(new Slot(playerInventory, i, x, hotbarY));
@@ -86,7 +86,4 @@ public class TransmutationScreenHandler extends ScreenHandler {
         return this.inventory.canPlayerUse(player);
     }
 
-    public Inventory getInventory() {
-        return this.inventory;
-    }
 }
