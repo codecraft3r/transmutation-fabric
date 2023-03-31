@@ -1,28 +1,30 @@
 package org.poiesis.transmutation.ui;
 
-import io.wispforest.owo.ui.base.BaseOwoHandledScreen;
-import io.wispforest.owo.ui.container.Containers;
-import io.wispforest.owo.ui.container.FlowLayout;
-import io.wispforest.owo.ui.core.OwoUIAdapter;
-import io.wispforest.owo.ui.core.Surface;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Identifier;
 
-public class TransmutationScreen extends BaseOwoHandledScreen<FlowLayout, TransmutationScreenHandler> {
+public class TransmutationScreen extends HandledScreen<TransmutationScreenHandler> {
+    private static final Identifier TEXTURE = new Identifier("transmutation", "textures/gui/transmutation_screen.png");
 
-    public TransmutationScreen(TransmutationScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
+    public TransmutationScreen(TransmutationScreenHandler screenHandler, PlayerInventory playerInventory, Text title) {
+        super(screenHandler, playerInventory, title);
+        this.passEvents = false;
+        this.backgroundWidth = 176;
+        this.backgroundHeight = 222;
     }
 
     @Override
-    protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
-        return OwoUIAdapter.create(this, Containers::verticalFlow);
-    }
-
-    @Override
-    protected void build(FlowLayout rootComponent) {
-        rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        int x = (this.width - this.backgroundWidth) / 2;
+        int y = (this.height - this.backgroundHeight) / 2;
+        drawTexture(matrices, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
     }
 
 }
+

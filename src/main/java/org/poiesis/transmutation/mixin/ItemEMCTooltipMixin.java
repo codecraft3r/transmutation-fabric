@@ -22,7 +22,11 @@ public class ItemEMCTooltipMixin {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
         int emc = Main.emcValueStore.getEmcValue(Registries.ITEM.getId(stack.getItem()).toString());
         if (emc != 0) {
+            int stackEmc = emc * stack.getCount();
             tooltip.add(Text.translatable("text.transmutation.emc", emc));
+            if(emc != stackEmc) {
+                tooltip.add(Text.translatable("text.transmutation.stack_emc", stackEmc));
+            }
         }
     }
 }
