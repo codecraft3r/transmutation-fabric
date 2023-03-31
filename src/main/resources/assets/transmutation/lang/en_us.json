@@ -1,4 +1,5 @@
 {
   "text.transmutation.emc": "§bEMC: §f%d",
+  "text.transmutation.stack_emc": "§bStack EMC: §f%d",
   "block.transmutation.transmutation_table": "Transmutation Table"
 }

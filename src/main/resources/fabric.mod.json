@@ -3,14 +3,14 @@
   "id": "transmutation",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Transmutation",
+  "description": "An implementation of the transmutation mechanic from ProjectE/Equivalent Exchange on Fabric.",
   "authors": [
-    "Me!"
+    "CodeCraft3r"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "www.example.com",
+    "sources": "https://github.com/codecraft3r/transmutation-fabric"
   },
 
   "license": "CC0-1.0",
