@@ -7,7 +7,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.minecraft.util.Identifier;
 
-public final class RegisterComponents implements EntityComponentInitializer {
+public final class Components implements EntityComponentInitializer {
     public static final ComponentKey<SyncedIntComponent> SYNCED_INT_COMPONENT = ComponentRegistry.getOrCreate(new Identifier("transmutation", "synced_int"), SyncedIntComponent.class);
     public static final ComponentKey<SyncedStringArrayListComponent> SYNCED_STRING_ARRAY_LIST_COMPONENT = ComponentRegistry.getOrCreate(new Identifier("transmutation", "synced_string_array_list"), SyncedStringArrayListComponent.class);
     @Override

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
 import org.poiesis.transmutation.Main;
-import org.poiesis.transmutation.components.RegisterComponents;
+import org.poiesis.transmutation.components.Components;
 import org.poiesis.transmutation.components.SyncedIntComponent;
 
 public class EmcItemSlot extends Slot {
@@ -31,14 +31,14 @@ public class EmcItemSlot extends Slot {
     }
     @Override
     public ItemStack getStack() {
-        if (RegisterComponents.SYNCED_INT_COMPONENT.get(this.player).getValue() >= Main.emcValueStore.getEmcValue(Registries.ITEM.getId(this.item).toString())) {
+        if (Components.SYNCED_INT_COMPONENT.get(this.player).getValue() >= Main.emcValueStore.getEmcValue(Registries.ITEM.getId(this.item).toString())) {
             return new ItemStack(this.item, 1);
         }
         return ItemStack.EMPTY;
     }
     @Override
     public ItemStack takeStack(int amount) {
-        SyncedIntComponent playerEmc = RegisterComponents.SYNCED_INT_COMPONENT.get(this.player);
+        SyncedIntComponent playerEmc = Components.SYNCED_INT_COMPONENT.get(this.player);
         int itemEmc = Main.emcValueStore.getEmcValue(Registries.ITEM.getId(this.item).toString());
         if (playerEmc.getValue() >= itemEmc) {
             playerEmc.setValue(playerEmc.getValue() - itemEmc);

@@ -10,7 +10,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import org.poiesis.transmutation.Main;
-import org.poiesis.transmutation.components.RegisterComponents;
+import org.poiesis.transmutation.components.Components;
 import org.poiesis.transmutation.components.SyncedIntComponent;
 import org.poiesis.transmutation.components.SyncedStringArrayListComponent;
 
@@ -20,7 +20,7 @@ public class TransmutationScreenHandler extends ScreenHandler {
 
     public TransmutationScreenHandler(int syncId, PlayerInventory playerInventory) {
         super(Main.TRANSMUTATION_SCREEN_HANDLER, syncId);
-        SyncedStringArrayListComponent knowledge = RegisterComponents.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
+        SyncedStringArrayListComponent knowledge = Components.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
         int howBigIsYourBrain = knowledge.getList().size();
         this.inventory = new SimpleInventory(howBigIsYourBrain);
         this.sacrificialInventory = new SimpleInventory(1);
@@ -40,13 +40,16 @@ public class TransmutationScreenHandler extends ScreenHandler {
             Identifier id = Registries.ITEM.getId(stack.getItem());
             int emcValue = Main.emcValueStore.getEmcValue(id.toString());
             if (emcValue != 0) {
-                SyncedIntComponent playerEmc = RegisterComponents.SYNCED_INT_COMPONENT.get(playerInventory.player);
+                SyncedIntComponent playerEmc = Components.SYNCED_INT_COMPONENT.get(playerInventory.player);
                 playerEmc.setValue(playerEmc.getValue() + (emcValue * stack.getCount()));
             } else {
+                // Drop the item on the ground
+                PlayerEntity player = playerInventory.player;
+                player.dropItem(stack, false);
                 return;
             }
 
-            SyncedStringArrayListComponent playerKnowledge = RegisterComponents.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
+            SyncedStringArrayListComponent playerKnowledge = Components.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
             if (!playerKnowledge.getList().contains(id.toString())) {
                 playerKnowledge.getList().add(id.toString());
             }

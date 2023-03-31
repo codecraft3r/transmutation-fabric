@@ -8,6 +8,4 @@ import net.minecraft.block.Blocks;
 public class RegisterBlocks implements BlockRegistryContainer {
     public static final Block TRANSMUTATION_TABLE = new TransmutationTableBlock(FabricBlockSettings.copy(Blocks.CRAFTING_TABLE).nonOpaque());
 
-
-
 }

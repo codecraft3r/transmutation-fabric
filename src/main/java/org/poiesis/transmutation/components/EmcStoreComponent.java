@@ -16,7 +16,7 @@ public class EmcStoreComponent implements SyncedIntComponent {
     @Override
     public void setValue(int value) {
         this.value = value;
-        RegisterComponents.SYNCED_INT_COMPONENT.sync(this.provider);
+        Components.SYNCED_INT_COMPONENT.sync(this.provider);
     }
     @Override public boolean shouldSyncWith(ServerPlayerEntity player) {
         return player == this.provider;
