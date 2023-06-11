@@ -2,24 +2,19 @@ package org.poiesis.transmutation;
 
 import com.google.gson.Gson;
 import io.wispforest.owo.network.OwoNetChannel;
-import io.wispforest.owo.registration.reflect.FieldRegistrationHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.util.Identifier;
-import org.poiesis.transmutation.block.RegisterBlockEntities;
+import org.poiesis.transmutation.registration.RegisterBlockEntities;
 import org.poiesis.transmutation.config.TransmutationConfig;
 import org.poiesis.transmutation.emc.EmcValueMapper;
 import org.poiesis.transmutation.emc.EmcValueStore;
 import org.poiesis.transmutation.emc.ItemEntry;
-import org.poiesis.transmutation.block.RegisterBlocks;
+import org.poiesis.transmutation.registration.RegisterBlocks;
 import org.poiesis.transmutation.listeners.PlayerJoinListener;
 import org.poiesis.transmutation.listeners.ServerStartListener;
-import net.minecraft.screen.ScreenHandlerType;
-import org.poiesis.transmutation.ui.TransmutationScreenHandler;
+import org.poiesis.transmutation.registration.RegisterScreens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +28,7 @@ public class Main implements ModInitializer {
 	// emc
 	public static EmcValueStore emcValueStore = new EmcValueStore();
 	public static EmcValueMapper emcValueMapper = new EmcValueMapper();
-	public static final ScreenHandlerType<TransmutationScreenHandler> TRANSMUTATION_SCREEN_HANDLER = new ScreenHandlerType<>(TransmutationScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);
+
 	// networking
 	public record EmcMapPacket(String emcMap) {}
 	public static final OwoNetChannel EMCMAPCHANNEL = OwoNetChannel.create(new Identifier("transmutation", "main"));
@@ -65,13 +60,13 @@ public class Main implements ModInitializer {
 		LOGGER.info("Done. Transmutation mod initialized.");
 
 		// Register items
-		FieldRegistrationHandler.register(RegisterBlocks.class, "transmutation", false);
+		RegisterBlocks.registerAll();
 		//Register block entities
-		FieldRegistrationHandler.register(RegisterBlockEntities.class, "transmutation", false);
+		RegisterBlockEntities.registerAll();
 
+		// Register screens
+		RegisterScreens.registerShared();
 
-		// register screen handler
-		Registry.register(Registries.SCREEN_HANDLER, new Identifier("transmutation", "transmutation_screen_handler"), TRANSMUTATION_SCREEN_HANDLER);
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.

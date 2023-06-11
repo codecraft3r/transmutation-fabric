@@ -13,13 +13,14 @@ import org.poiesis.transmutation.Main;
 import org.poiesis.transmutation.components.Components;
 import org.poiesis.transmutation.components.SyncedIntComponent;
 import org.poiesis.transmutation.components.SyncedStringArrayListComponent;
+import org.poiesis.transmutation.registration.RegisterScreens;
 
 public class TransmutationScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final SimpleInventory sacrificialInventory;
 
     public TransmutationScreenHandler(int syncId, PlayerInventory playerInventory) {
-        super(Main.TRANSMUTATION_SCREEN_HANDLER, syncId);
+        super(RegisterScreens.TRANSMUTATION_SCREEN_HANDLER, syncId);
         SyncedStringArrayListComponent knowledge = Components.SYNCED_STRING_ARRAY_LIST_COMPONENT.get(playerInventory.player);
         int howBigIsYourBrain = knowledge.getList().size();
         this.inventory = new SimpleInventory(howBigIsYourBrain);
